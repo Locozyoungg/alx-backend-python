@@ -1,22 +1,17 @@
+
 #!/usr/bin/env python3
-"""
-Module for safe_first_element function
-"""
+''' Description: Augment the following code with the correct
+                 duck-typed annotations
+    Arguments: lst: Sequence[Any]
+'''
+
 from typing import Sequence, Any, Union
 
+
 def safe_first_element(lst: Sequence[Any]) -> Union[Any, None]:
-    """
-    Returns the first element of the list if it exists, otherwise None.
-
-    Args:
-    lst (Sequence[Any]): A sequence of any type.
-
-    Returns:
-    Union[Any, None]: The first element or None.
-    """
+    ''' Return the first element of lst if there is any, otherwise None. '''
     if lst:
         return lst[0]
     else:
         return None
-
 
