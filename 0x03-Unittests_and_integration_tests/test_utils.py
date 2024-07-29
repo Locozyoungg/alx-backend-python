@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
-"""
-utils.py
+import unittest
+from parameterized import parameterized
+from utils import access_nested_map
 
-This module contains utility functions for accessing nested maps.
-"""
+class TestAccessNestedMap(unittest.TestCase):
+    
+    @parameterized.expand([
+        ({"a": 1}, ("a",), 1),
+        ({"a": {"b": 2}}, ("a",), {"b": 2}),
+        ({"a": {"b": 2}}, ("a", "b"), 2)
+    ])
+    def test_access_nested_map(self, nested_map, path, expected):
+        self.assertEqual(access_nested_map(nested_map, path), expected)
+    
+    @parameterized.expand([
+        ({}, ("a",)),
+        ({"a": 1}, ("a", "b"))
+    ])
+    def test_access_nested_map_exception(self, nested_map, path):
+        with self.assertRaises(KeyError) as context:
+            access_nested_map(nested_map, path)
+        self.assertEqual(str(context.exception), str(path[-1]))
 
-from typing import Any, Dict, Tuple
-
-def access_nested_map(nested_map: Dict[str, Any], path: Tuple[str, ...]) -> Any:
-    """
-    Access a nested map with a given path.
-
-    Args:
-        nested_map (Dict[str, Any]): The dictionary to access.
-        path (Tuple[str, ...]): The path of keys to access in the dictionary.
-
-    Returns:
-        Any: The value found at the end of the path in the nested dictionary.
-
-    Raises:
-        KeyError: If a key in the path does not exist in the dictionary.
-    """
-    for key in path:
-        nested_map = nested_map[key]
-    return nested_map
+if __name__ == '__main__':
+    unittest.main()
