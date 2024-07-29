@@ -57,12 +57,12 @@ class TestGithubOrgClient(unittest.TestCase):
             mock_url.assert_called_once()
 
     @parameterized.expand([
-        ({'license': {'key': 'my_license'}}, 'my_license', True),
-        ({'license': {'key': 'other_license'}}, 'my_license', False)
+        ({"license": {"key": "my_license"}}, "my_license", True),
+        ({"license": {"key": "other_license"}}, "my_license", False)
     ])
-    def test_has_license(self, repo: dict, license: str, expected: bool) -> None:
+    def test_has_license(self, repo: dict, license_key: str, expected: bool) -> None:
         """ Test the license checker """
-        self.assertEqual(GithubOrgClient.has_license(repo, license), expected)
+        self.assertEqual(GithubOrgClient.has_license(repo, license_key), expected)
 
 
 @parameterized_class(
@@ -115,3 +115,4 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         self.assertEqual(y.public_repos("apache-2.0"), self.apache2_repos)
         self.get.assert_has_calls([call("https://api.github.com/orgs/x"),
                                    call(self.org_payload["repos_url"])])
+
