@@ -79,12 +79,12 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         cls.get = cls.get_patcher.start()
 
         # Set up the mock responses
-        cls.get.side_effect = lambda url: Mock(json=Mock(return_value=cls._mock_responses.get(url, {})))
-
         cls._mock_responses = {
             cls.org_payload["repos_url"]: cls.repos_payload,
             "https://api.github.com/orgs/x": cls.org_payload
         }
+
+        cls.get.side_effect = lambda url: Mock(json=Mock(return_value=cls._mock_responses.get(url, {})))
 
     @classmethod
     def tearDownClass(cls) -> None:
