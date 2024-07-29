@@ -75,20 +75,16 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         """ Prepare for testing """
-        org = TEST_PAYLOAD[0][0]
-        repos = TEST_PAYLOAD[0][1]
-        org_mock = Mock()
-        org_mock.json = Mock(return_value=org)
-        cls.org_mock = org_mock
-        repos_mock = Mock()
-        repos_mock.json = Mock(return_value=repos)
-        cls.repos_mock = repos_mock
-
         cls.get_patcher = patch('requests.get')
         cls.get = cls.get_patcher.start()
 
-        options = {cls.org_payload["repos_url"]: repos_mock}
-        cls.get.side_effect = lambda y: options.get(y, org_mock)
+        # Set up the mock responses
+        cls.get.side_effect = lambda url: Mock(json=Mock(return_value=cls._mock_responses.get(url, {})))
+
+        cls._mock_responses = {
+            cls.org_payload["repos_url"]: cls.repos_payload,
+            "https://api.github.com/orgs/x": cls.org_payload
+        }
 
     @classmethod
     def tearDownClass(cls) -> None:
